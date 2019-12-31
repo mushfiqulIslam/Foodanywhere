@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Resturant{% endblock %}
+{% block sidebar %}
+  <!--
+  <a href="{% url 'resturant-report' %}">Reports</a> -->
+
+			<nav id="sidebar">
+				<div class="p-5 pt-6">
+          <img class="img logo rounded-circle mb-5" src="{{ MEDIA_URL }}{{ request.user.resturant.logo }}" alt="">
+          <h5 style="color:white;">Hi, {{ request.user.get_full_name }}</h5>
+					<h6>{{ request.user.resturant }}</h6>
+	        <ul class="list-unstyled components mb-5">
+	          <li>
+	              <a href="{% url 'resturant-order' %}">Orders</a>
+	          </li>
+	          <li>
+              <a href="{% url 'resturant-meal' %}">Meals</a>
+	          </li>
+	          <li>
+              <a href="{% url 'resturant-report' %}">Reports</a>
+	          </li>
+            <li>
+              <a href="{% url 'resturant-account' %}">Account</a>
+	          </li>
+	        </ul>
+
+	        <div class="footer">
+            <a href="{% url 'resturant-sign-out' %}"><button class="btn btn-pink">Logout</button></a>
+	         </div>
+    	</nav>
+{% endblock %}

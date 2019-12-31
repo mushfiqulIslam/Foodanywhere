@@ -1,0 +1,22 @@
+{% extends 'resturant/sidebar.html' %}
+{% load bootstrap4 %}
+{% block title %}{{ request.user.resturant }} | Edit Account{% endblock %}
+{% block content %}
+    <div class="col-lg-offset-2 col-lg-8 ">
+      <div class="panel">
+        <div class="panel-heading bg-blue">
+          <h4 class="panel-title text-center text-white">Account</h4>
+        </div>
+        <div class="panel-body">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% bootstrap_form user_form %}
+
+            {% bootstrap_form resturant_form %}
+            <button type="submit" class="btn btn-pink">Update</button>
+          </form>
+        </div>
+      </div>
+    </div>
+{% endblock %}
