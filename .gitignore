@@ -1,3 +1,7 @@
 __pycache__/
 db.sqlite3
 *.pyc
+.admin.txt
+resturant_logo/
+meal_images/
+migrations/
