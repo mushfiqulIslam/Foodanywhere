@@ -1,4 +1,41 @@
 {% extends 'resturant/sidebar.html' %}
-{% block title %}{% endblock %}
+{% block title %}{{ request.user.resturant }} | Meals{% endblock %}
 {% block content %}
+  <div id="content" class="p-4 p-md-5">
+    <div class="panel">
+      <br>
+      <div class="panel-heading bg-blue">
+        <h4 class="panel-title text-center text-white">Meals</h4>
+      </div>
+      <div class="panel-body">
+        <div class="text-right">
+          <a href="{% url 'resturant-add-meal' %}" class="btn btn-pink">Add Meal</a>
+          <br>
+          <br>
+        </div>
+        <table class="table table-bordered table-hover table-stripe">
+          <thead class="thead-dark">
+            <tr class="text-white">
+              <th>Id</th>
+              <th>Name</th>
+              <th>Short description</th>
+              <th>Price</th>
+              <th class="text-center">Image</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for meal in meals %}
+              <tr>
+                <td scope="row">{{ meal.id }}</td>
+                <td><a href="{% url 'resturant-edit-meal' meal.id %}">{{ meal.name }}</a></td>
+                <td>{{ meal.short_description }}</td>
+                <td>{{ meal.price }}</td>
+                <td class="text-center"><img class="rounded" src="{{ MEDIA_URL}}{{ meal.image }}" width="50" height="50"></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 {% endblock %}

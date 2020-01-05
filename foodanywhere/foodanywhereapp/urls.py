@@ -14,8 +14,11 @@ urlpatterns = [
         name = 'resturant-sign-out'),
     path('resturant/sign-up/', views.ResturantSignUp.as_view(), name = 'resturant-sign-up'),
     path('resturant/account/', views.ResturantAccount.as_view(), name = 'resturant-account'),
+    #meal
     path('resturant/meal/', views.ResturantMeal.as_view(), name = 'resturant-meal'),
     path('resturant/meal/add/', views.ResturantAddMeal.as_view(), name = 'resturant-add-meal'),
+    path('resturant/meal/edit/<int:pk>/', views.ResturantEditMeal.as_view(), name = 'resturant-edit-meal'),
+
     path('resturant/order/', views.ResturantOrder.as_view(), name = 'resturant-order'),
     path('resturant/report/', views.ResturantReport.as_view(), name = 'resturant-report'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

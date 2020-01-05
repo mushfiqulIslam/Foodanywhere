@@ -1,10 +1,11 @@
-from django.views.generic import TemplateView
-from django.views.generic.edit import FormView
-from django.urls import reverse
+from django.views.generic import TemplateView, ListView
+from django.views.generic.edit import FormView, UpdateView
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import RedirectView
+from .models import Meal, Order
 from .forms import UserForm, ResturantForm, UserFormForEdit, MealForm
 from django.contrib.auth.models import User
 from multi_form_view import MultiModelFormView
@@ -80,11 +81,16 @@ class ResturantAccount(LoginRequiredMixin, TemplateView):
         })
 
 
-class ResturantMeal(LoginRequiredMixin, TemplateView):
+class ResturantMeal(LoginRequiredMixin, ListView):
     """showing meal of resturant"""
 
     login_url = 'resturant-sign-in'
     template_name = 'resturant/meal.html'
+    model = Meal
+    context_object_name = 'meals'
+
+    def get_queryset(self):
+        return Meal.objects.filter(resturant=self.request.user.resturant)
 
 
 class ResturantAddMeal(LoginRequiredMixin, FormView):
@@ -102,11 +108,36 @@ class ResturantAddMeal(LoginRequiredMixin, FormView):
         return redirect('resturant-meal')
 
 
+class ResturantEditMeal(LoginRequiredMixin, UpdateView):
+    """docstring for ."""
+
+    login_url = 'resturant-sign-in'
+    template_name = 'resturant/edit_meal.html'
+    model = Meal
+    fields = ("name", "short_description", "image", "price")
+    success_url = reverse_lazy('resturant-meal')
+
+
 class ResturantOrder(LoginRequiredMixin, TemplateView):
     """showing order of resturant"""
 
     login_url = 'resturant-sign-in'
     template_name = 'resturant/order.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['order'] = Order.objects.filter(resturant=self.request.user.resturant).order_by("-id")
+        return context
+
+    def post(self, request, *args, **kwargs):
+        order = Order.objects.get(id=request.POST["id"], resturant=request.user.resturant)
+        if order.status == Order.COOKING:
+            order.status = order.READY
+            order.save()
+        order = Order.objects.filter(resturant=self.request.user.resturant).order_by("-id")
+        return render(request, self.template_name, {
+            'order': order,
+        })
 
 
 class ResturantReport(LoginRequiredMixin, TemplateView):

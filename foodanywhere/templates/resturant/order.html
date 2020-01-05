@@ -1,4 +1,57 @@
 {% extends 'resturant/sidebar.html' %}
-{% block title %}{% endblock %}
+{% block title %}{{ request.user.resturant }} | Orders{% endblock %}
 {% block content %}
+  <div id="content" class="p-4 p-md-5">
+    <div class="panel">
+      <br>
+      <div class="panel-heading bg-blue">
+        <h4 class="panel-title text-center text-white">Orders</h4>
+      </div>
+      <div class="panel-body">
+        <br>
+        <br>
+        <table class="table table-bordered table-hover table-stripe">
+          <thead class="thead-dark">
+            <tr class="text-white">
+              <th>Id</th>
+              <th>Order Details</th>
+              <th>Customer</th>
+              <th>Driver</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in order %}
+              <tr>
+                <td scope="row">{{ order }}</td>
+                <td>
+                  {% for order_details in order.order_details.all %}
+                    {{ order_details.meal }} {{ order_details.meal.price }} x
+                    {{ order_details.quantity }} = {{ order_details.sub_total }}
+                  {% endfor %}
+                </td>
+                <td>{{ order.customer }}</td>
+                <td>{{ order.driver }}</td>
+                <td>{{ order.total }}</td>
+                <td>{{ order.get_status_display }}</td>
+                <td>
+                  {% if order.status == 1 %}
+                    <form method="post">
+                      {% csrf_token %}
+                      <input name="id" value="{{ order.id }}" hidden>
+                      <button type="submit" class="btn btn-success">Ready</button>
+                    </form>
+                  {% else %}
+                  Done
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 {% endblock %}
