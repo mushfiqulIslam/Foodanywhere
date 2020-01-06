@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'social.apps.django_app.default',
     'rest_framework_social_oauth2',
     'bootstrap4',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

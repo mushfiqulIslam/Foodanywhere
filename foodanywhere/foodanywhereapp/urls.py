@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views, apis
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf import settings
@@ -21,4 +21,10 @@ urlpatterns = [
 
     path('resturant/order/', views.ResturantOrder.as_view(), name = 'resturant-order'),
     path('resturant/report/', views.ResturantReport.as_view(), name = 'resturant-report'),
+
+    #APIs for Customer
+    path('api/customer/resturants/', apis.CustomerResturants.as_view()),
+    path('api/customer/<int:resturant_id>/meals/', apis.CustomerMeals.as_view()),
+    path('api/customer/order/add/', apis.CustomerOrder.as_view()),
+    path('api/customer/order/latest/', apis.CustomerOrder.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
