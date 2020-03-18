@@ -12,7 +12,9 @@
 					<h6>{{ request.user.resturant }}</h6>
 	        <ul class="list-unstyled components mb-5">
 	          <li>
-	              <a href="{% url 'resturant-order' %}">Orders</a>
+	              <a href="{% url 'resturant-order' %}">Orders
+									<span class="badge"></span>
+								</a>
 	          </li>
 	          <li>
               <a href="{% url 'resturant-meal' %}">Meals</a>
