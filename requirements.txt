@@ -9,3 +9,4 @@ six==1.12.0
 sqlparse==0.3.0
 django-bootstrap4==1.1.1
 djangorestframework==3.10.3
+stripe==2.44.0

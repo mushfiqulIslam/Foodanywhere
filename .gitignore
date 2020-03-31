@@ -5,3 +5,4 @@ db.sqlite3
 resturant_logo/
 meal_images/
 migrations/
+node_modules/

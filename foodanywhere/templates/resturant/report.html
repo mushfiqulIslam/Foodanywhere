@@ -1,4 +1,141 @@
 {% extends 'resturant/sidebar.html' %}
-{% block title %}{% endblock %}
+{% block title %}{{ request.user.resturant }} | Report{% endblock %}
 {% block content %}
+<div id="content" class="p-4 p-md-5">
+  <div class="row">
+
+  <div class="col-lg-8">
+    <!-- Revenue by Week -->
+    <div class="panel">
+      <div class="panel-heading bg-blue">
+        <h4 class="panel-title text-center text-white">
+          Revenue by Week
+        </h4>
+      </div>
+      <div id="container" style="width: 100%;">
+        <canvas id="revenue-chart" height="165" ></canvas>
+      </div>
+    </div>
+
+    <br><br>
+    <!-- Order by Week -->
+    <div class="panel">
+      <div class="panel-heading bg-blue">
+        <h4 class="panel-title text-center text-white">
+          Order by Week
+        </h4>
+      </div>
+      <div id="container" style="width: 100%;">
+        <canvas id="order-chart" height="165" ></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <!-- TOP 3 Meals -->
+    <div class="panel">
+      <div class="panel-heading bg-blue">
+        <h4 class="panel-title text-center text-white">
+          Top 3 Food
+        </h4>
+      </div>
+      <div id="container" style="width: 100%;">
+      <canvas id="top3-chart" width="200" height="200"></canvas>
+      </div>
+    </div>
+    <br><br><br>
+  </div>
+</div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script>
+//Revenue by Week
+  $(function () {
+
+    var $revenueChart = $("#revenue-chart");
+    $.ajax({
+      success: function (data) {
+
+        var ctx = $revenueChart[0].getContext("2d");
+
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            datasets: [{
+              label: 'Revenue by Week',
+              backgroundColor: "rgba(54,162,235,0.9)",
+              data: {{ revenue }}
+            }]
+          }
+
+        });
+
+      }
+    });
+
+  });
+
+
+
+//Order by Week
+  $(function () {
+
+    var $revenueChart = $("#order-chart");
+    $.ajax({
+      success: function (data) {
+
+        var ctx = $revenueChart[0].getContext("2d");
+
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            datasets: [{
+              label: 'Order by Week',
+              backgroundColor: "#758AA2",
+              data: {{ orders }}
+            }]
+          }
+
+        });
+
+      }
+    });
+
+  });
+
+//TOP 3 Meals
+  $(function () {
+
+    var $revenueChart = $("#top3-chart");
+    $.ajax({
+      success: function (data) {
+
+        var ctx = $revenueChart[0].getContext("2d");
+
+        new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: {{ meal.labels|safe }},
+            datasets: [{
+              backgroundColor: ["#FFCE56", "#FF6384", "#2475B0"],
+              data: {{ meal.data }}
+            }]
+          }
+
+        });
+
+      }
+    });
+
+  });
+
+
+</script>
+
+
 {% endblock %}

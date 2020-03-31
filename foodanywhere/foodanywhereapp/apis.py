@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.http import JsonResponse
 from braces.views import CsrfExemptMixin
 from oauth2_provider.models import AccessToken
-from .models import Resturant, Meal, Order, OrderDetails
+from .models import Resturant, Meal, Order, OrderDetails, Driver
 from .serializers import ResturantSerializer, MealSerializer, OrderSerializer
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -108,7 +108,7 @@ class ResturantOrderNotification(APIView):
     def get(self, request, last_request_time, *args, **kwargs):
         notification = Order.objects.filter(resturant=request.user.resturant,
             create_at__gt=last_request_time).count()
-        return JsonResponse({'notification':notification})
+        return JsonResponse({'notification': notification})
 
 ##################
 # Driver Section #
@@ -217,3 +217,40 @@ class DriverRevenue(APIView):
 
 
         return JsonResponse({"revenue" : revenue})
+
+
+class DriverLocation(APIView):
+    """docstring for ."""
+    #params: access_token
+    def get(self, request, *args, **kwargs):
+        # Get token
+        access_token = AccessToken.objects.get(token=request.GET.get('access_token'),
+            expires__gt=timezone.now())
+        # Get driver location
+        customer = access_token.user.customer
+        current_order = Order.objects.filter(customer=customer, status=Order.ONTHEWAY).last()
+        location = current_order.driver.location
+        return JsonResponse({"location": location})
+
+
+class DriverLocationUpdate(APIView):
+    """docstring for ."""
+    @method_decorator(csrf_exempt)
+    #params: access_token, latitude, longitude
+    def post(self, request, *args, **kwargs):
+        # Get token
+        access_token = AccessToken.objects.get(token=request.POST['access_token'],
+            expires__gt=timezone.now())
+        # Get driver
+        driver = access_token.user.driver
+        #Set location
+        driver.location = request.POST['location']
+        driver.save()
+        return JsonResponse({"status": "success"})
+
+
+##################
+# Stripe Section #
+##################
+
+# class DriverLocationUpdate(APIView):

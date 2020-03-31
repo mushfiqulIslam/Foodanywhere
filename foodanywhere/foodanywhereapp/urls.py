@@ -28,11 +28,14 @@ urlpatterns = [
     path('api/customer/order/add/', apis.CustomerOrderAdd.as_view()),
     path('api/resturant/order/notification/<str:last_request_time>/', apis.ResturantOrderNotification.as_view(), name = 'resturant-notification'),
     path('api/customer/order/latest/', apis.CustomerLatestOrder.as_view()),
+    path('api/customer/driver/location/', apis.DriverLocation.as_view()),
 
     #APIs for Drivers
-    path('api/driver/orders/ready', apis.DriverReadyOrder.as_view()),
-    path('api/driver/orders/pick', apis.DriverPickOrder.as_view()),
-    path('api/driver/orders/latest', apis.DriverRecentOrder.as_view()),
-    path('api/driver/orders/complete', apis.DriverCompleteOrder.as_view()),
-    path('api/driver/revenue', apis.DriverRevenue.as_view()),
+    path('api/driver/orders/ready/', apis.DriverReadyOrder.as_view()),
+    path('api/driver/orders/pick/', apis.DriverPickOrder.as_view()),
+    path('api/driver/orders/latest/', apis.DriverRecentOrder.as_view()),
+    path('api/driver/orders/complete/', apis.DriverCompleteOrder.as_view()),
+    path('api/driver/revenue/', apis.DriverRevenue.as_view()),
+    path('api/driver/location/update/', apis.DriverLocationUpdate.as_view()),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -5,10 +5,12 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import RedirectView
-from .models import Meal, Order
+from .models import Meal, Order, Driver
 from .forms import UserForm, ResturantForm, UserFormForEdit, MealForm
 from django.contrib.auth.models import User
 from multi_form_view import MultiModelFormView
+from datetime import datetime, timedelta
+from django.db.models import Sum, Count, Case, When
 
 
 class Home(RedirectView):
@@ -141,7 +143,40 @@ class ResturantOrder(LoginRequiredMixin, TemplateView):
 
 
 class ResturantReport(LoginRequiredMixin, TemplateView):
-    """showing report of resturant"""
+    """showing report of resturant by calculating revenue and number of order by current week"""
 
     login_url = 'resturant-sign-in'
     template_name = 'resturant/report.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        revenue = []
+        orders = []
+
+        today = datetime.now()
+        current_weekdays = [today + timedelta(days = i) for i in range(0 - today.weekday(), 7 - today.weekday())]
+
+        for day in current_weekdays:
+            delivered_orders = Order.objects.filter(
+                resturant = self.request.user.resturant,
+                status = Order.DELIVERED,
+                create_at__year = day.year,
+                create_at__month = day.month,
+                create_at__day = day.day
+            )
+            revenue.append(sum(order.total for order in delivered_orders))
+            orders.append(delivered_orders.count())
+
+        context['revenue'] = revenue
+        context['orders'] = orders
+        # Top 3 Meals
+        top3_meals = Meal.objects.filter(resturant = self.request.user.resturant)\
+                     .annotate(total_order = Sum('orderdetails__quantity'))\
+                     .order_by("-total_order")[:3]
+
+        meal = {
+            "labels": [meal.name for meal in top3_meals],
+            "data": [meal.total_order or 0 for meal in top3_meals]
+            }
+        context['meal'] = meal
+        return context

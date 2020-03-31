@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework_social_oauth2',
     'bootstrap4',
     'rest_framework',
+    'stripe'
 ]
 
 MIDDLEWARE = [
@@ -164,3 +165,6 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email'
 }
+
+STRIPE_SECRET_KEY = 'sk_test_OT0GiiV0rsxnFVxQIWAsa6wg00ENuq4PW7'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_nrVt0an9YgW6hpAcdDS01Dxq00Kywplnl8'
