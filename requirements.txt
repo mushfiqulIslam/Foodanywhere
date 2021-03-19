@@ -8,5 +8,5 @@ pytz==2019.2
 six==1.12.0
 sqlparse==0.3.0
 django-bootstrap4==1.1.1
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 stripe==2.44.0
