@@ -1,5 +1,5 @@
 certifi==2019.6.16
-Django==2.2.5
+Django==2.2.21
 django-multi-form-view==2.0.1
 gunicorn==19.9.0
 olefile==0.46
