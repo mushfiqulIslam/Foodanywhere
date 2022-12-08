@@ -1,4 +1,4 @@
-certifi==2019.6.16
+certifi==2022.12.7
 Django==2.2.5
 django-multi-form-view==2.0.1
 gunicorn==19.9.0
